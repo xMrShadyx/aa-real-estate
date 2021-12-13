@@ -4,18 +4,15 @@ import com.lastToCreateProject.aarealestate.converter.FloorConverter;
 import com.lastToCreateProject.aarealestate.dto.FloorDto;
 import com.lastToCreateProject.aarealestate.model.Floor;
 import com.lastToCreateProject.aarealestate.service.FloorService;
-
 import org.junit.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -37,7 +34,7 @@ public class FloorControllerTest extends BaseControllerTest {
         when(floorService.save(any(Floor.class))).thenReturn(Floor.builder().build());
         when(floorConverter.toFloorDto(any(Floor.class))).thenReturn(FloorDto.builder().id(1L).number(1).build());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/floors")
+        mockMvc.perform(post("/floors")
                         .content(requestJson)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -70,7 +67,7 @@ public class FloorControllerTest extends BaseControllerTest {
         when(floorService.findById(any(Long.class))).thenReturn(Floor.builder().build());
         when(floorConverter.toFloorDto(any(Floor.class))).thenReturn(FloorDto.builder().id(1L).number(5).build());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/floor/id/1"))
+        mockMvc.perform(get("/floor/id/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(1)))

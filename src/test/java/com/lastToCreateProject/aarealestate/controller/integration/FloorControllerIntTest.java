@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lastToCreateProject.aarealestate.dto.FloorDto;
 import com.lastToCreateProject.aarealestate.model.Floor;
 import com.lastToCreateProject.aarealestate.repository.FloorRepository;
-import io.restassured.http.ContentType;
+import org.apache.http.entity.ContentType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class FloorControllerIntTest {
         String jsonRequest = objectMapper.writeValueAsString(floorDto);
 
         given()
-                .contentType(ContentType.JSON.toString())
+                .contentType(ContentType.APPLICATION_JSON.toString())
                 .body(jsonRequest)
                     .when()
                         .post("http://localhost:8080/floors")
@@ -50,7 +50,7 @@ public class FloorControllerIntTest {
         String jsonRequest = objectMapper.writeValueAsString(floorDto);
 
         given()
-                .contentType(ContentType.JSON.toString())
+                .contentType(ContentType.APPLICATION_JSON.toString())
                 .body(jsonRequest)
                     .when()
                         .post("http://localhost:8080/floors")
@@ -61,16 +61,17 @@ public class FloorControllerIntTest {
     }
 
     @Test
-    public void findByNumber() throws Exception {
+    public void findByNumber() {
         floorRepository.save(Floor.builder().number(1).build());
 
         given()
-                .contentType(ContentType.JSON.toString())
+                .contentType(ContentType.APPLICATION_JSON.toString())
                 .when()
-                .post("http://localhost:8080/floors/number/1")
+                .get("http://localhost:8080/floors/number/1")
                 .then()
                 .statusCode(200)
                 .body("id", equalTo(1))
                 .body("number", equalTo(1));
     }
+
 }
